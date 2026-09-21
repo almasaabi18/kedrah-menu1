@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شاشة منيو - خِدرة</title>
+    
+    <!-- تحديث الصفحة بالكامل كل 30 دقيقة (1800 ثانية) لجلب أي تعديلات من قيت هب -->
+    <meta http-equiv="refresh" content="1800">
+    
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #005430; /* لون خِدرة الأخضر السعودي */
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .slideshow-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        .slide {
+            display: none;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* يمكنك تغييرها إلى contain إذا أردت ظهور الصورة كاملة بدون قص */
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .active {
+            display: block;
+            animation: fade 1.5s;
+        }
+        @keyframes fade {
+            from { opacity: 0.8 }
+            to { opacity: 1 }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="slideshow-container">
+        <!-- أضف صور المنيو هنا، تأكد أن الاسم يطابق اسم الصورة المرفوعة -->
+        <img class="slide active" src="menu-1.jpg" alt="منيو 1">
+        
+        <!-- لزيادة الصور، قم بإزالة التعليق (الأسهم) عن السطر التالي وعدل اسم الصورة -->
+        <!-- <img class="slide" src="menu-2.jpg" alt="منيو 2"> -->
+    </div>
+
+    <script>
+        // دالة لمنع الكاش (Cache) في الشاشات الذكية، تضيف رقم عشوائي لنهاية رابط الصورة
+        function preventCache() {
+            const images = document.getElementsByTagName('img');
+            const timestamp = new Date().getTime();
+            for (let i = 0; i < images.length; i++) {
+                // التأكد من عدم إضافة الرمز أكثر من مرة
+                let originalSrc = images[i].getAttribute('src').split('?')[0]; 
+                images[i].src = originalSrc + '?v=' + timestamp;
+            }
+        }
+
+        // دالة لتقليب الصور إذا كان هناك أكثر من صورة
+        let slideIndex = 0;
+        const slides = document.getElementsByClassName("slide");
+
+        function showSlides() {
+            if (slides.length <= 1) return; // إذا كانت صورة واحدة، ستبقى ثابتة
+            
+            for (let i = 0; i < slides.length; i++) {
+                slides[i].classList.remove("active");
+            }
+            slideIndex++;
+            if (slideIndex > slides.length) { slideIndex = 1 }
+            slides[slideIndex - 1].classList.add("active");
+            
+            setTimeout(showSlides, 15000); // تغيير الصورة كل 15 ثانية (15000 مللي ثانية)
+        }
+
+        window.onload = function() {
+            preventCache();
+            showSlides();
+        };
+    </script>
+
+</body>
+</html>
